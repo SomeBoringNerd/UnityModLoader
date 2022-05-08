@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityModLoader", "UnityModLoader\UnityModLoader.csproj", "{16A30BEB-8CC1-4715-BD6C-7E10AED58FFF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{16A30BEB-8CC1-4715-BD6C-7E10AED58FFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16A30BEB-8CC1-4715-BD6C-7E10AED58FFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16A30BEB-8CC1-4715-BD6C-7E10AED58FFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16A30BEB-8CC1-4715-BD6C-7E10AED58FFF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
