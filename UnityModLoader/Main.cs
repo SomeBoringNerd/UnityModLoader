@@ -42,7 +42,9 @@ namespace Loader
             
             
             // initialize the logger and pass to it the config file
-            point.gameObject.AddComponent<logger>();
+            if(point.gameObject.GetComponent<logger>() == null){
+                point.gameObject.AddComponent<logger>();
+            }
             
             point.Load();
         }

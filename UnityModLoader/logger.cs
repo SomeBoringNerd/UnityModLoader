@@ -9,28 +9,37 @@ public class logger : MonoBehaviour
     private bool log = true;
 
     public ConfigUtil config;
+    public static int instances = 0;
     
-    public void Awake()
+    public void Start()
     {
-        messages = new List<string>();
-        
-        Application.logMessageReceived += LogMessageReceived;
-        Debug.Log("[ModLoader] : SimpleLogSystem was loaded");
+        instances++;
 
-        config = new ConfigUtil();
+        if (instances != 1)
+        {
+            this.enabled = false;
+        }else{
         
-        
-        logStyle = new GUIStyle();
-        
-        logStyle.normal.textColor = config.getColorFromConfig(config.getString(Settings.logging_color));
-        log = config.getBool(Settings.logging);
-        max_msg = config.getInt(Settings.max_messages);
+            messages = new List<string>();
+            
+            Application.logMessageReceived += LogMessageReceived;
+            Debug.Log("[ModLoader] : SimpleLogSystem was loaded");
 
-        // used for debugging, please ignore.
-        //base.gameObject.AddComponent<test>();
-        //base.gameObject.GetComponent<test>().log = this;
+            config = new ConfigUtil();
+            
+            
+            logStyle = new GUIStyle();
+            
+            logStyle.normal.textColor = config.getColorFromConfig(config.getString(Settings.logging_color));
+            log = config.getBool(Settings.logging);
+            
+            Debug.Log("Loaded Logger instance " + instances);
+            
+            // used for debugging, please ignore.
+            //base.gameObject.AddComponent<test>();
+            //base.gameObject.GetComponent<test>().log = this;
         
-        
+        }
     }
 
 
@@ -55,7 +64,7 @@ public class logger : MonoBehaviour
     }
     
     // max message that can be seen on the screen at once (25 by default)
-    private int max_msg = 25;
+    private int max_msg = 35;
     
     // getting logs as string vars
     private List<string> messages;
@@ -70,7 +79,7 @@ public class logger : MonoBehaviour
         if (!log) return;
         
         rect.position = new Vector2(2f, 2f);
-        rect.size = new Vector2(200f, Screen.height);
+        rect.size = new Vector2(500f, 768f);
         GUI.Label(rect, text, logStyle);
     }
 }
