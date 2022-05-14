@@ -11,6 +11,10 @@ namespace Loader
 {
     public class Loader : MonoBehaviour
     {
+        // one-time use variables
+        // to be more precise :
+        // instantiated : if an instance of the class was created
+        // hooked : if the loader was successfully loaded
         static bool instantiated = false;
         static bool hooked = false;
         
@@ -19,52 +23,54 @@ namespace Loader
         /// </summary>
         public static void Hook()
         {
-            if (!hooked)
-            {
-                hooked = true;
-                SceneManager.sceneLoaded += SceneLoaded;
-            }
-        }
-
-        public static void SceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            if (!instantiated && scene.name != string.Empty)
-            {
-                instantiated = true;
-                GameObject go = new GameObject("ModLoader");
-                Loader point = go.AddComponent<Loader>();
-                DontDestroyOnLoad(go);
-            }
-
+            if (hooked) return;
+            
+            hooked = true;
+            SceneManager.sceneLoaded += SceneLoaded;
         }
         
-        public void Awake()
+        /// <summary>
+        /// Launched every time a scene is loaded
+        /// </summary>
+        public static void SceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            base.gameObject.AddComponent<logger>();
+            if (instantiated && scene.name == string.Empty) return;
+            
+            GameObject go = new GameObject("ModLoader");
+            Loader point = go.AddComponent<Loader>();
+            DontDestroyOnLoad(go);
+            
+            
+            // initialize the logger and pass to it the config file
+            point.gameObject.AddComponent<logger>();
+            
+            point.Load();
+        }
+        
+        /// <summary>
+        ///     In short, the main part of the loader.
+        /// </summary>
+        public void Load()
+        {
+            // we dont want to load each mod each time a scene is loaded
+            if (instantiated) return;
             
             // we only want to attempt to load a dll if the mod folder exist because, well, else, it would be empty.
             string path = "";
-            if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
-            {
-                path = Application.streamingAssetsPath + "\\Mods";
-            }
-            else
-            {
-                path = Application.streamingAssetsPath + "/Mods";
-            }
+
+            path = (Application.platform == RuntimePlatform.WindowsPlayer ||
+                    Application.platform == RuntimePlatform.WindowsEditor)
+                ? Application.streamingAssetsPath + "\\Mods"
+                : Application.streamingAssetsPath + "/Mods";
             
             if(Directory.Exists(path))
             {
-                
-                
                 // get, in theory, every possible mod in the mods folder
                 string[] mods = Directory.GetDirectories(path);
                 
                 foreach (string mod in mods)
                 {
-                    //Debug.Log(Application.streamingAssetsPath + "\\Mods" + "\\" + mod + "\\" + mod + ".dll");
-                    Debug.Log(mod);
-                    Debug.Log("possible mod found : " + Path.GetFileName(mod) + "/" + Path.GetFileName(mod) + ".dll");
+                    Debug.Log("mod found : " + Path.GetFileName(mod) + "/" + Path.GetFileName(mod) + ".dll");
                     LoadDLL(Path.GetFileName(mod));
                 }
             }
@@ -74,8 +80,13 @@ namespace Loader
                 {
                     Directory.CreateDirectory(path);
                 }
-                catch{}
+                catch(Exception e)
+                {
+                    Debug.Log("couldn't create mod folder : " + e);
+                }
             }
+            
+            instantiated = true;
         }
         
         /// <summary>
@@ -86,19 +97,14 @@ namespace Loader
         {
             
             string path = "";
-            if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
-            {
-                path = Application.streamingAssetsPath + "\\Mods" + "\\" + DllName + "\\" + DllName + ".dll" ;
-            }
-            else
-            {
-                path = Application.streamingAssetsPath + "/Mods" + "/" + DllName + "/" + DllName + ".dll";
-            }
+            path = (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor) 
+                ? Application.streamingAssetsPath + "\\Mods" + "\\" + DllName + "\\" + DllName + ".dll"
+                : Application.streamingAssetsPath + "/Mods" + "/" + DllName + "/" + DllName + ".dll";
             
             try
             {
                 Assembly dll = Assembly.LoadFile(path);
-                // Application.streamingAssetsPath + "\\Mods" + "\\" + DllName + "\\" + DllName + ".dll";
+                
                 Type[] entry = dll.GetExportedTypes();
 
                 foreach (Type type in entry)
@@ -115,8 +121,5 @@ namespace Loader
                 Debug.LogError("Couldn't load " + DllName + " for the reason : " + e);
             }
         }
-        
-        
-        
     }
 }

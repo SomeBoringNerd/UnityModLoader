@@ -47,8 +47,6 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="ConfigFile.cs" />
-        <Compile Include="ConfigUtil.cs" />
         <Compile Include="logger.cs" />
         <Compile Include="Main.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />

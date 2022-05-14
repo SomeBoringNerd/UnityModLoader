@@ -37,7 +37,7 @@ downloadable here : https://github.com/dnSpy/dnSpy/releases
 
 -> press ctrl + alt + s, then ok
 
--> install your mods in {Game}_Data\StreamingAssets\Mods, or launch the game without mods so it can create the folder.
+-> install your mods in {Game}_Data\StreamingAssets\Mods, or launch the game without mods so it can create the folder.****
 
 ##### coming soon :
 -> Auto Injector to remove the manual injection (for Windows and Linux)
