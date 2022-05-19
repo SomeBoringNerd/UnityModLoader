@@ -50,7 +50,7 @@ public class logger : MonoBehaviour
     {
         if (messages.Count >= max_msg)
         {
-            this.messages.RemoveAt(0);
+            messages.RemoveAt(0);
         }
             
         messages.Add("[" + type + "] : " + message);
@@ -59,7 +59,7 @@ public class logger : MonoBehaviour
         
         foreach (string text in messages)
         {
-            this.text = this.text + text + "\n";
+            text = text + msg + "\n";
         }
     }
     
