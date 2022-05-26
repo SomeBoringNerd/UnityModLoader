@@ -18,7 +18,8 @@ public class logger : MonoBehaviour
         if (instances != 1)
         {
             this.enabled = false;
-        }else{
+        }else
+        {
         
             messages = new List<string>();
             

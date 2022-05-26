@@ -27,6 +27,8 @@ namespace Loader
             
             hooked = true;
             SceneManager.sceneLoaded += SceneLoaded;
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
         
         /// <summary>
